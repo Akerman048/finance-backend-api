@@ -44,20 +44,48 @@ export const loginUserService = async (data) => {
     throw error;
   }
 
-  const token = jwt.sign(
+  const accessToken = jwt.sign(
     {
       id: user.id,
       email: user.email,
     },
-    process.env.JWT_SECRET,
+    process.env.JWT_ACCESS_SECRET,
+    {
+      expiresIn: "15m",
+    },
+  );
+
+  const refreshToken = jwt.sign(
+    {
+      id: user.id,
+    },
+    process.env.JWT_REFRESH_SECRET,
     {
       expiresIn: "7d",
     },
   );
 
   return {
-    token,
+    accessToken,
+    refreshToken,
   };
+};
+
+/* REFRESH ACCESS TOKEN */
+export const refreshAccessTokenService = async (refreshToken) => {
+  const decoder = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+  const accessToken = jwt.sign(
+    {
+      id: decoder.id,
+    },
+    process.env.JWT_ACCESS_SECRET,
+    {
+      expiresIn: "15m",
+    },
+  );
+
+  return accessToken;
 };
 
 /* GET USER BY ID */

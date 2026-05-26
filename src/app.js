@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 
 import { errorMiddleware } from "./middlewares/errorMiddleware.middleware.js";
 import transactionsRoutes from "./routes/transactions.routes.js";
@@ -17,7 +18,10 @@ app.use(
     credentials: true,
   }),
 );
+
 app.use(express.json());
+app.use(cookieParser());
+
 
 app.get("/", (req, res) => {
   res.json({ message: "API works" });
