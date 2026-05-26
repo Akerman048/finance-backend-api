@@ -2,7 +2,6 @@ import express from "express";
 import {
   registerUser,
   loginUser,
-  getMonthlyAnalytics,
   refreshToken,
   logoutUser,
   getMe,
@@ -14,7 +13,6 @@ const router = express.Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginLimiter, loginUser);
-router.get('/monthly', authMiddleware, getMonthlyAnalytics)
 router.post("/refresh", refreshToken);
 router.use("/logout", logoutUser);
 router.get("/me", authMiddleware, getMe);
